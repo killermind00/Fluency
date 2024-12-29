@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Grammar Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .level {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .reward {
+            font-size: 18px;
+            color: #ff5722;
+            margin-top: 10px;
+        }
+        .question-container {
+            margin: 20px 0;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .option.correct {
+            background-color: #4caf50;
+            color: white;
+        }
+        .option.incorrect {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>English Grammar Game</h1>
+    <div class="container">
+        <div id="levels-container"></div>
+        <div id="reward" class="reward"></div>
+        <div id="question-container" class="question-container" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = {
+            beginner: [
+                                [
+    { 
+        question: "What is the synonym for sturdy?", 
+        options: ["Strong", "Fragile", "Small"], 
+        answer: "Strong" 
+    },
+    { 
+        question: "What is the antonym for bright?", 
+        options: [ "Radiant","Dull", "Shiny"], 
+        answer: "Dull" 
+    },
+    { 
+        question: "What is the synonym for happy?", 
+        options: ["Cheerful", "Sad", "Angry"], 
+        answer: "Cheerful" 
+    },
+    { 
+        question: "What is the antonym for fast?", 
+        options: [ "Quick", "Early","Slow"], 
+        answer: "Slow" 
+    },
+    { 
+        question: "What is the synonym for calm?", 
+        options: ["Peaceful", "Furious", "Noisy"], 
+        answer: "Peaceful" 
+    }
+],
+[
+    { 
+        question: "What is the synonym for strong?", 
+        options: ["Weak", "Powerful", "Fragile"], 
+        answer: "Powerful" 
+    },
+    { 
+        question: "What is the antonym for wide?", 
+        options: ["Narrow", "Broad", "Large"], 
+        answer: "Narrow" 
+    },
+    { 
+        question: "What is the synonym for angry?", 
+        options: [ "Happy", "Calm","Furious"], 
+        answer: "Furious" 
+    },
+    { 
+        question: "What is the antonym for cheap?", 
+        options: ["Expensive", "Affordable", "Reasonable"], 
+        answer: "Expensive" 
+    },
+    { 
+        question: "What is the synonym for beautiful?", 
+        options: [ "Ugly","Lovely", "Plain"], 
+        answer: "Lovely" 
+    }
+],
+[
+    { 
+        question: "What is the synonym for brave?", 
+        options: ["Courageous", "Fearful", "Weak"], 
+        answer: "Courageous" 
+    },
+    { 
+        question: "What is the antonym for strong?", 
+        options: [ "Robust","Weak", "Sturdy"], 
+        answer: "Weak" 
+    },
+    { 
+        question: "What is the synonym for clean?", 
+        options: [ "Dirty", "Messy","Pristine"], 
+        answer: "Pristine" 
+    },
+    { 
+        question: "What is the antonym for quiet?", 
+        options: ["Loud", "Silent", "Calm"], 
+        answer: "Loud" 
+    },
+    { 
+        question: "What is the synonym for gentle?", 
+        options: [ "Happy", "Calm","Furious"], 
+        answer: "Calm"    }
+],
+[
+    { 
+        question: "What is the synonym for calm?", 
+        options: ["Peaceful", "Noisy", "Nervous"], 
+        answer: "Peaceful" 
+    },
+    { 
+        question: "What is the antonym for polite?", 
+        options: [ "Kind","Rude", "Respectful"], 
+        answer: "Rude" 
+    },
+    { 
+        question: "What is the synonym for tired?", 
+        options: ["Exhausted", "Energetic", "Rested"], 
+        answer: "Exhausted" 
+    },
+    { 
+        question: "What is the antonym for increase?", 
+        options: [ "Expand", "Grow","Decrease"], 
+        answer: "Decrease" 
+    },
+    { 
+        question: "What is the synonym for difficult?", 
+        options: ["Challenging", "Easy", "Simple"], 
+        answer: "Challenging" 
+    }
+],
+[
+    { 
+        question: "What is the synonym for swift?", 
+        options: [ "Slow", "Delayed","Fast"], 
+        answer: "Fast" 
+    },
+    { 
+        question: "What is the antonym for rare?", 
+        options: ["Common", "Unique", "Exclusive"], 
+        answer: "Common" 
+    },
+    { 
+        question: "What is the synonym for angry?", 
+        options: [ "Calm", "Happy","Furious",], 
+        answer: "Furious" 
+    },
+    { 
+        question: "What is the antonym for agree?", 
+        options: ["Disagree", "Approve", "Accept"], 
+        answer: "Disagree" 
+    },
+    { 
+        question: "What is the synonym for fragile?", 
+        options: ["Strong", "Sturdy","Delicate"], 
+        answer: "Delicate" 
+    }
+],
+[
+    { 
+        question: "What is the synonym for expand?", 
+        options: [ "Shrink","Enlarge", "Reduce"], 
+        answer: "Enlarge" 
+    },
+    { 
+        question: "What is the antonym for false?", 
+        options: ["Fake", "Incorrect","True"], 
+        answer: "True" 
+    },
+    { 
+        question: "What is the synonym for gather?", 
+        options: ["Collect", "Disperse", "Scatter"], 
+        answer: "Collect" 
+    },
+    { 
+        question: "What is the antonym for brave?", 
+        options: ["Fearless","Cowardly", "Bold"], 
+        answer: "Cowardly" 
+    },
+    { 
+        question: "What is the synonym for empty?", 
+        options: ["Vacant", "Full", "Occupied"], 
+        answer: "Vacant" 
+    }
+],
+[
+    { 
+        question: "What is the synonym for small?", 
+        options: ["Tiny", "Huge", "Broad"], 
+        answer: "Tiny" 
+    },
+    { 
+        question: "What is the antonym for easy?", 
+        options: ["Simple", "Basic","Difficult"], 
+        answer: "Difficult" 
+    },
+    { 
+        question: "What is the synonym for bright?", 
+        options: [ "Dull","Radiant", "Pale"], 
+        answer: "Radiant" 
+    },
+    { 
+        question: "What is the antonym for rich?", 
+        options: ["Poor", "Wealthy", "Prosperous"], 
+        answer: "Poor" 
+    },
+    { 
+        question: "What is the synonym for tired?", 
+        options: [ "Energetic", "Exhausted","Happy"], 
+        answer: "Exhausted" 
+    }
+],
+[
+    { 
+        question: "What is the synonym for observe?", 
+        options: ["Watch", "Ignore", "Overlook"], 
+        answer: "Watch" 
+    },
+    { 
+        question: "What is the antonym for wealthy?", 
+        options: [ "Rich", "Poor","Affluent"], 
+        answer: "Poor" 
+    },
+    { 
+        question: "What is the synonym for timid?", 
+        options: ["Shy", "Bold", "Fearless"], 
+        answer: "Shy" 
+    },
+    { 
+        question: "What is the antonym for victory?", 
+        options: [ "Success", "Triumph","Defeat"], 
+        answer: "Defeat" 
+    },
+    { 
+        question: "What is the synonym for ancient?", 
+        options: ["Old", "Modern", "New"], 
+        answer: "Old" 
+    }
+],
+[
+    { 
+        question: "What is the synonym for brave?", 
+        options: ["Scared", "Shy","Courageous"], 
+        answer: "Courageous" 
+    },
+    { 
+        question: "What is the antonym for generous?", 
+        options: ["Selfish", "Kind", "Supportive"], 
+        answer: "Selfish" 
+    },
+    { 
+        question: "What is the synonym for clever?", 
+        options: ["Stupid", "Intelligent", "Careless"], 
+        answer: "Intelligent" 
+    },
+    { 
+        question: "What is the antonym for optimistic?", 
+        options: ["Pessimistic", "Hopeful", "Cheerful"], 
+        answer: "Pessimistic" 
+    },
+    { 
+        question: "What is the synonym for fascinating?", 
+        options: [ "Boring", "Uninteresting","Captivating"], 
+        answer: "Captivating" 
+    }
+],
+[
+    { 
+        question: "What is the synonym for elusive?", 
+        options: ["Clear", "Obvious","Difficult to grasp"], 
+        answer: "Difficult to grasp" 
+    },
+    { 
+        question: "What is the antonym for benevolent?", 
+        options: ["Malevolent", "Generous", "Compassionate"], 
+        answer: "Malevolent" 
+    },
+    { 
+        question: "What is the synonym for meticulous?", 
+        options: [ "Careless","Precise", "Inconsistent"], 
+        answer: "Precise" 
+    },
+    { 
+        question: "What is the antonym for lucid?", 
+        options: ["Obscure", "Clear", "Transparent"], 
+        answer: "Obscure" 
+    },
+    { 
+        question: "What is the synonym for indifferent?", 
+        options: ["Enthusiastic", "Passionate","Apathetic"], 
+        answer: "Apathetic" 
+    }
+]
+
+
+
+
+                // Add levels 3-10 for beginner similarly...
+            ],
+            intermediate: [
+                [
+    { 
+        question: "What does the phrasal verb 'give up' mean?", 
+        options: ["To surrender or stop trying", "To donate something", "To increase effort"], 
+        answer: "To surrender or stop trying" 
+    },
+    { 
+        question: "What does the phrasal verb 'run into' mean?", 
+        options: [ "To collide with something", "To avoid someone","To meet someone unexpectedly"], 
+        answer: "To meet someone unexpectedly" 
+    },
+    { 
+        question: "What does the phrasal verb 'look after' mean?", 
+        options: ["To follow someone", "To take care of someone", "To search for something"], 
+        answer: "To take care of someone" 
+    },
+    { 
+        question: "What does the phrasal verb 'break down' mean?", 
+        options: ["To cry uncontrollably", "To stop functioning (e.g., a machine)", "To argue or fight"], 
+        answer: "To stop functioning (e.g., a machine)" 
+    },
+    { 
+        question: "What does the phrasal verb 'turn down' mean?", 
+        options: ["To reduce the volume or intensity", "To turn around","To reject something or someone"], 
+        answer: "To reject something or someone" 
+    }
+],
+[
+    { 
+        question: "What does the phrasal verb 'set off' mean?", 
+        options: ["To begin a journey", "To cause something to explode", "To stop something"], 
+        answer: "To begin a journey" 
+    },
+    { 
+        question: "What does the phrasal verb 'make up' mean?", 
+        options: ["To compensate for something", "To invent a story or lie", "To repair something"], 
+        answer: "To invent a story or lie" 
+    },
+    { 
+        question: "What does the phrasal verb 'hold on' mean?", 
+        options: ["To wait for a short time", "To grab something tightly", "To let go of something"], 
+        answer: "To wait for a short time" 
+    },
+    { 
+        question: "What does the phrasal verb 'take off' mean?", 
+        options: ["To remove something (e.g., clothes)", "To leave the ground (e.g., an airplane)", "To fall down"], 
+        answer: "To leave the ground (e.g., an airplane)" 
+    },
+    { 
+        question: "What does the phrasal verb 'cut down on' mean?", 
+        options: [ "To remove or eliminate something", "To chop something completely","To reduce the amount of something"], 
+        answer: "To reduce the amount of something" 
+    }
+],
+[
+    { 
+        question: "What does the phrasal verb 'pick up' mean?", 
+        options: ["To take something from the ground", "To improve or get better", "To drop something"], 
+        answer: "To take something from the ground" 
+    },
+    { 
+        question: "What does the phrasal verb 'call off' mean?", 
+        options: ["To cancel something", "To advertise something", "To wait for something"], 
+        answer: "To cancel something" 
+    },
+    { 
+        question: "What does the phrasal verb 'give in' mean?", 
+        options: ["To refuse to accept something", "To stop resisting or surrender", "To provide something"], 
+        answer: "To stop resisting or surrender" 
+    },
+    { 
+        question: "What does the phrasal verb 'get along' mean?", 
+        options: ["To argue with someone", "To cooperate or be friendly with someone", "To leave a place"], 
+        answer: "To cooperate or be friendly with someone" 
+    },
+    { 
+        question: "What does the phrasal verb 'go on' mean?", 
+        options: ["To stop doing something", "To leave a location","To continue doing something"], 
+        answer: "To continue doing something" 
+    }
+],
+[
+    { 
+        question: "What does the phrasal verb 'run across' mean?", 
+        options: [ "To race towards something", "To argue with someone","To meet someone unexpectedly"], 
+        answer: "To meet someone unexpectedly" 
+    },
+    { 
+        question: "What does the phrasal verb 'take over' mean?", 
+        options: ["To control or dominate something", "To let someone take control", "To go on a vacation"], 
+        answer: "To control or dominate something" 
+    },
+    { 
+        question: "What does the phrasal verb 'hold back' mean?", 
+        options: [ "To offer something","To prevent from moving forward", "To accept something"], 
+        answer: "To prevent from moving forward" 
+    },
+    { 
+        question: "What does the phrasal verb 'pick out' mean?", 
+        options: ["To choose something from a group", "To pick something up from the ground", "To drop something"], 
+        answer: "To choose something from a group" 
+    },
+    { 
+        question: "What does the phrasal verb 'go through' mean?", 
+        options: ["To examine or review something", "To pass by something", "To stop something from happening"], 
+        answer: "To examine or review something" 
+    }
+],
+[
+    { 
+        question: "What does the phrasal verb 'bring up' mean?", 
+        options: ["To mention or start discussing a topic", "To raise something high", "To lift something from the ground"], 
+        answer: "To mention or start discussing a topic" 
+    },
+    { 
+        question: "What does the phrasal verb 'take after' mean?", 
+        options: ["To arrive later than someone", "To follow someone physically","To resemble someone, usually in appearance"], 
+        answer: "To resemble someone, usually in appearance" 
+    },
+    { 
+        question: "What does the phrasal verb 'pass out' mean?", 
+        options: ["To give something to someone", "To faint or lose consciousness", "To walk away from a group"], 
+        answer: "To faint or lose consciousness" 
+    },
+    { 
+        question: "What does the phrasal verb 'put off' mean?", 
+        options: ["To postpone or delay something", "To extinguish a fire", "To start a new task"], 
+        answer: "To postpone or delay something" 
+    },
+    { 
+        question: "What does the phrasal verb 'check out' mean?", 
+        options: ["To inspect or look at something", "To pay a bill", "To leave a place"], 
+        answer: "To inspect or look at something" 
+    }
+],
+[
+    { 
+        question: "I had to _______ the meeting because of an urgent issue.", 
+        options: ["turn up", "call off", "bring up"], 
+        answer: "call off" 
+    },
+    { 
+        question: "He always tries to _______ his mistakes by making excuses.", 
+        options: ["set off", "make up", "pick up"], 
+        answer: "make up" 
+    },
+    { 
+        question: "They were so happy when they finally _______ their old friends after years.", 
+        options: ["ran into", "looked after", "gave up"], 
+        answer: "ran into" 
+    },
+    { 
+        question: "She had to _______ the promotion, as she was too busy with other commitments.", 
+        options: ["hold on", "turn down", "break down"], 
+        answer: "turn down" 
+    },
+    { 
+        question: "I couldn’t _______ how difficult the test was until I started it.", 
+        options: ["go on", "get along",], 
+        answer: "break down" 
+    }
+],
+[
+    { 
+        question: "I can’t believe they decided to _______ the wedding after all the preparations.", 
+        options: ["give up", "break up", "call off"], 
+        answer: "call off" 
+    },
+    { 
+        question: "She tried to _______ with her new project after the old one failed.", 
+        options: ["look after", "get along", "pick up"], 
+        answer: "pick up" 
+    },
+    { 
+        question: "They finally managed to _______ their differences and become friends again.", 
+        options: ["break up", "make up", "give up"], 
+        answer: "make up" 
+    },
+    { 
+        question: "The airplane will _______ in a few minutes, so please fasten your seatbelt.", 
+        options: ["take off", "hold on", "bring up"], 
+        answer: "take off" 
+    },
+    { 
+        question: "I need to _______ on my spending if I want to save money.", 
+        options: ["break down", "pick out", "cut down"], 
+        answer: "cut down" 
+    }
+],
+[
+    { 
+        question: "After a long day, I just want to _______ and relax.", 
+        options: ["bring up", "wind down", "give in"], 
+        answer: "wind down" 
+    },
+    { 
+        question: "She always tries to _______ the situation when things get heated.", 
+        options: ["calm down", "run out", "set off"], 
+        answer: "calm down" 
+    },
+    { 
+        question: "I couldn’t _______ the fact that she was leaving the company.", 
+        options: ["take after", "bring back", "get over"], 
+        answer: "get over" 
+    },
+    { 
+        question: "He was finally able to _______ his thoughts after a long period of confusion.", 
+        options: ["sort out", "turn around", "pass out"], 
+        answer: "sort out" 
+    },
+    { 
+        question: "We were forced to _______ our vacation plans because of the bad weather.", 
+        options: ["put off", "take over", "hold back"], 
+        answer: "put off" 
+    }
+],
+[
+    { 
+        question: "She decided to _______ the idea of moving to another country for a job.", 
+        options: ["go on", "rule out", "pick out"], 
+        answer: "rule out" 
+    },
+    { 
+        question: "The project manager was able to _______ the team after the crisis was over.", 
+        options: ["set off", "break down", "pull together"], 
+        answer: "pull together" 
+    },
+    { 
+        question: "I didn’t expect the news to _______ such a reaction from the audience.", 
+        options: ["bring about", "take over", "put forward"], 
+        answer: "bring about" 
+    },
+    { 
+        question: "They _______ the problem when they realized they missed a step in the process.", 
+        options: ["let down", "ran across", "figured out"], 
+        answer: "figured out" 
+    },
+    { 
+        question: "You should _______ any negative influences and focus on your goals.", 
+        options: ["break up with", "cut off", "turn down"], 
+        answer: "cut off" 
+    }
+],
+[
+    { 
+        question: "They were able to _______ the details of the new contract at the last meeting.", 
+        options: ["hammer out", "take on", "break down"], 
+        answer: "hammer out" 
+    },
+    { 
+        question: "After a few hours of brainstorming, they finally _______ a solution to the problem.", 
+        options: [ "took up", "fell out with","came up with"], 
+        answer: "came up with" 
+    },
+    { 
+        question: "The manager asked us to _______ the report and send it to the client by tomorrow.", 
+        options: ["go over", "take over", "hand out"], 
+        answer: "go over" 
+    },
+    { 
+        question: "She decided to _______ the offer after considering all the terms carefully.", 
+        options: ["put down", "turn down", "take off"], 
+        answer: "turn down" 
+    },
+    { 
+        question: "His rude behavior finally _______ her patience, and she decided to leave.", 
+        options: ["broke out", "ran out of", "held up"], 
+        answer: "ran out of" 
+    }
+]
+
+                // Add levels 2-10 for intermediate similarly...
+            ],
+            advanced: [
+                [
+                    { 
+        question: "I need to 'get' to the meeting on time.", 
+        options: ["Arrive", "Depart", "Walk"], 
+        answer: "Arrive" 
+    },
+    { 
+        question: "I can 'help' you with your homework.", 
+        options: ["Ignore", "Assist", "Trouble"], 
+        answer: "Assist" 
+    },
+    { 
+        question: "The task was 'easy' to complete.", 
+        options: ["Challenging","Complex", "Effortless"], 
+        answer: "Effortless" 
+    },
+    { 
+        question: "The car was moving 'fast' down the street.", 
+        options: ["Slow", "Rapidly", "Gently"], 
+        answer: "Rapidly" 
+    },
+    { 
+        question: "That was a 'good' presentation.", 
+        options: ["Mediocre", "Excellent", "Poor"], 
+        answer: "Excellent" 
+    }                ],
+[
+    { 
+        question: "That was a 'bad' decision to make.", 
+        options: ["Ill-advised", "Brilliant", "Outstanding"], 
+        answer: "Ill-advised" 
+    },
+    { 
+        question: "She was feeling 'angry' when she found out the truth.", 
+        options: ["Furious", "Calm", "Happy"], 
+        answer: "Furious" 
+    },
+    { 
+        question: "He felt very 'happy' after hearing the news.", 
+        options: [ "Confused", "Disappointed","Ecstatic"], 
+        answer: "Ecstatic" 
+    },
+    { 
+        question: "The task was 'hard' to finish on time.", 
+        options: ["Simple", "Arduous", "Effortless"], 
+        answer: "Arduous" 
+    },
+    { 
+        question: "They launched a 'new' product last week.", 
+        options: ["Innovative", "Old", "Common"], 
+        answer: "Innovative" 
+    }
+],
+[
+    { 
+        question: "She was feeling 'angry' after hearing the news.", 
+        options: ["Furious", "Content", "Satisfied"], 
+        answer: "Furious" 
+    },
+    { 
+        question: "The meeting was extremely 'important' for the future of the company.", 
+        options: ["Unnecessary", "Casual","Indispensable"], 
+        answer: "Indispensable" 
+    },
+    { 
+        question: "There was a 'big' crowd gathered at the event.", 
+        options: ["Tiny","Gargantuan", "Small"], 
+        answer: "Gargantuan" 
+    },
+    { 
+        question: "Can you 'help' me finish this task?", 
+        options: ["Facilitate", "Complicate", "Ignore"], 
+        answer: "Facilitate" 
+    },
+    { 
+        question: "The train was moving 'fast' through the tunnel.", 
+        options: ["Slowly", "Clumsily","Swiftly"], 
+        answer: "Swiftly" 
+    }
+],
+[
+    { 
+        question: "The puzzle was quite 'easy' to solve.", 
+        options: ["Straightforward", "Complex", "Challenging"], 
+        answer: "Straightforward" 
+    },
+    { 
+        question: "He felt 'sad' after hearing the news of the loss.", 
+        options: [ "Thrilled", "Content","Despondent"], 
+        answer: "Despondent" 
+    },
+    { 
+        question: "She is a very 'smart' student.", 
+        options: ["Astute", "Oblivious", "Ignorant"], 
+        answer: "Astute" 
+    },
+    { 
+        question: "The 'big' mansion stood at the end of the street.", 
+        options: [ "Tiny", "Monumental","Modest"], 
+        answer: "Monumental" 
+    },
+    { 
+        question: "Could you 'help' me with the heavy lifting?", 
+        options: ["Assist", "Impede", "Hinder"], 
+        answer: "Assist" 
+    }
+],
+[
+    { 
+        question: "She gave a good presentation during the meeting.", 
+        options: ["Exceptional", "Mediocre", "Substandard"], 
+        answer: "Exceptional" 
+    },
+    { 
+        question: "They were happy to hear about her success.", 
+        options: [ "Miserable","Elated", "Neutral"], 
+        answer: "Elated" 
+    },
+    { 
+        question: "The exam was incredibly hard.", 
+        options: ["Daunting", "Simple", "Effortless"], 
+        answer: "Daunting" 
+    },
+    { 
+        question: "That was a bad idea to attempt.", 
+        options: ["Beneficial", "Prudent","Detrimental"], 
+        answer: "Detrimental" 
+    },
+    { 
+        question: "They launched a new software update last week.", 
+        options: ["Groundbreaking", "Outdated", "Old"], 
+        answer: "Groundbreaking" 
+    }
+],
+[
+    { 
+        question: "What does the idiom 'burn the midnight oil' mean?", 
+        options: ["To work late into the night", "To relax and take it easy", "To be busy with something irrelevant"], 
+        answer: "To work late into the night" 
+    },
+    { 
+        question: "What does the idiom 'break the ice' mean?", 
+        options: [ "To destroy something", "To stay silent in a conversation","To make a situation less awkward or tense"], 
+        answer: "To make a situation less awkward or tense" 
+    },
+    { 
+        question: "What does the idiom 'let the cat out of the bag' mean?", 
+        options: ["To hide something secretly", "To reveal a secret by accident", "To calm down a situation"], 
+        answer: "To reveal a secret by accident" 
+    },
+    { 
+        question: "What does the idiom 'hit the nail on the head' mean?", 
+        options: ["To fix something incorrectly", "To describe exactly what is causing a problem", "To ignore the details"], 
+        answer: "To describe exactly what is causing a problem" 
+    },
+    { 
+        question: "What does the idiom 'a blessing in disguise' mean?", 
+        options: ["A bad situation that turns out to be good", "A hidden treasure", "A difficult problem"], 
+        answer: "A bad situation that turns out to be good" 
+    }
+],
+[
+    { 
+        question: "What does the idiom 'kick the bucket' mean?", 
+        options: ["To finish a task", "To give up on something", "To die"], 
+        answer: "To die" 
+    },
+    { 
+        question: "What does the idiom 'burn your bridges' mean?", 
+        options: ["To commit to a decision that can't be undone", "To repair a relationship", "To build something of great value"], 
+        answer: "To commit to a decision that can't be undone" 
+    },
+    { 
+        question: "What does the idiom 'under the weather' mean?", 
+        options: ["To be happy", "To feel sick", "To enjoy the outdoors"], 
+        answer: "To feel sick" 
+    },
+    { 
+        question: "What does the idiom 'take it with a grain of salt' mean?", 
+        options: ["To be skeptical about something", "To take something literally", "To ignore someone's advice"], 
+        answer: "To be skeptical about something" 
+    },
+    { 
+        question: "What does the idiom 'a penny for your thoughts' mean?", 
+        options: ["To buy something cheap", "To ask someone what they're thinking", "To give advice"], 
+        answer: "To ask someone what they're thinking" 
+    }
+],
+[
+    { 
+        question: "After hearing the good news, I was so excited that I couldn’t wait to ___.", 
+        options: ["Take the plunge", "Spill the beans", "Jump on the bandwagon"], 
+        answer: "Spill the beans" 
+    },
+    { 
+        question: "She had a lot of challenges at work, but she always managed to ___ and get the job done.", 
+        options: ["Keep her nose to the grindstone", "Add insult to injury", "Break the ice"], 
+        answer: "Keep her nose to the grindstone" 
+    },
+    { 
+        question: "The manager tried to ___ during the heated discussion, but it only made things worse.", 
+        options: ["Open a can of worms", "Bite the bullet", "Throw in the towel"], 
+        answer: "Open a can of worms" 
+    },
+    { 
+        question: "He thought he was getting a promotion, but it turned out to be a ___.", 
+        options: ["Bitter pill to swallow", "Wild goose chase", "Flash in the pan"], 
+        answer: "Bitter pill to swallow" 
+    },
+    { 
+        question: "The negotiations went smoothly, and they were able to ___ and reach an agreement.", 
+        options: ["Hit the nail on the head", "Find common ground", "Beat around the bush"], 
+        answer: "Find common ground" 
+    }
+],
+[
+    { 
+        question: "She was on a roll at work, but after the big project, she seemed to ___.", 
+        options: ["Hit a brick wall", "Run out of steam", "Bite the bullet"], 
+        answer: "Run out of steam" 
+    },
+    { 
+        question: "Despite all the setbacks, the team managed to ___ and win the game.", 
+        options: ["Turn the tables", "Drop the ball", "Let the cat out of the bag"], 
+        answer: "Turn the tables" 
+    },
+    { 
+        question: "The new policy caused a lot of confusion, and everyone was ___ trying to understand the details.", 
+        options: ["In hot water", "Up in the air", "Between a rock and a hard place"], 
+        answer: "Up in the air" 
+    },
+    { 
+        question: "After a long day at work, I need to ___ and relax for a bit.", 
+        options: ["Pull someone’s leg", "Hit the sack", "Cry over spilled milk"], 
+        answer: "Hit the sack" 
+    },
+    { 
+        question: "He really ___ after the long weekend and was able to finish all the work ahead of schedule.", 
+        options: ["Went the extra mile", "Brought home the bacon", "Took the bull by the horns"], 
+        answer: "Took the bull by the horns" 
+    }
+],
+[
+    { 
+        question: "They tried to get the project started, but they ran into a ___ when they couldn’t get approval.", 
+        options: ["Bitter pill", "Dark horse", "Roadblock"], 
+        answer: "Roadblock" 
+    },
+    { 
+        question: "Her explanation sounded great, but she was just ___ to cover up her mistakes.", 
+        options: ["Playing with fire", "Pulling the wool over our eyes", "Burning the midnight oil"], 
+        answer: "Pulling the wool over our eyes" 
+    },
+    { 
+        question: "I didn’t expect him to fail the exam, but his performance really ___ me.", 
+        options: ["Took me by surprise", "Hit the nail on the head", "Missed the boat"], 
+        answer: "Took me by surprise" 
+    },
+    { 
+        question: "Despite all the rumors, he decided to ___ and focus on his work.", 
+        options: ["Keep a stiff upper lip", "Add fuel to the fire", "Spill the beans"], 
+        answer: "Keep a stiff upper lip" 
+    },
+    { 
+        question: "I had to ___ when I realized I had forgotten her birthday.", 
+        options: ["Face the music", "Keep my fingers crossed", "Jump through hoops"], 
+        answer: "Face the music" 
+    }
+],
+                // Add levels 2-10 for advanced similarly...
+            ]
+        };
+
+        const difficulties = ["beginner", "intermediate", "advanced"];
+        const levelsContainer = document.getElementById('levels-container');
+
+        // Create levels for all difficulties
+        difficulties.forEach((difficulty) => {
+            for (let i = 1; i <= 10; i++) {
+                const levelDiv = document.createElement('div');
+                levelDiv.className = 'level';
+                levelDiv.innerHTML = `
+                    <h3>${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} Level ${i}</h3>
+                    <button id="${difficulty}-level-${i}-btn" ${i > 1 ? 'disabled' : ''} 
+                            onclick="startLevel('${difficulty}', ${i})">Start</button>
+                `;
+                levelsContainer.appendChild(levelDiv);
+            }
+        });
+
+        // Function to start a level
+        function startLevel(difficulty, level) {
+            const levelQuestions = questions[difficulty][level - 1];
+            let currentQuestionIndex = 0;
+            let correctAnswers = 0;
+
+            const questionContainer = document.getElementById('question-container');
+            questionContainer.style.display = 'block';
+            questionContainer.innerHTML = '';
+
+            function showQuestion() {
+                if (currentQuestionIndex >= levelQuestions.length) {
+                    questionContainer.style.display = 'none';
+                    if (correctAnswers === levelQuestions.length) {
+                        unlockNextLevel(difficulty, level);
+                    } else {
+                        alert(`You answered ${correctAnswers}/${levelQuestions.length} questions correctly. Try again!`);
+                    }
+                    return;
+                }
+
+                const question = levelQuestions[currentQuestionIndex];
+                questionContainer.innerHTML = `<h3>${question.question}</h3>`;
+
+                question.options.forEach(option => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.onclick = () => {
+                        if (option === question.answer) {
+                            optionElement.classList.add('correct');
+                            correctAnswers++;
+                        } else {
+                            optionElement.classList.add('incorrect');
+                        }
+                        setTimeout(() => {
+                            currentQuestionIndex++;
+                            showQuestion();
+                        }, 1000);
+                    };
+                    questionContainer.appendChild(optionElement);
+                });
+            }
+
+            showQuestion();
+        }
+
+        // Unlock next level and show alert
+        function unlockNextLevel(difficulty, level) {
+            if (level < 10) {
+                document.getElementById(`${difficulty}-level-${level + 1}-btn`).disabled = false;
+                alert(`You have unlocked ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} Level ${level + 1}!`);
+            } else if (difficulty === 'advanced' && level === 10) {
+                showReward('Advanced Medal');
+            }
+        }
+
+        // Show reward for completing the game
+        function showReward(reward) {
+            document.getElementById('reward').innerText = `Congratulations! You have earned: ${reward}`;
+        }
+    </script>
+</body>
+</html>
